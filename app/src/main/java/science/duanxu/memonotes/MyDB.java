@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +41,6 @@ public class MyDB {
     }
 
     public void add(Memo memo) {
-        memos.add(memo);
         ContentValues cv = new ContentValues();
         cv.put("date", memo.date);
         cv.put("subject", memo.subject);
@@ -49,5 +49,11 @@ public class MyDB {
         db.insert(tableName, null, cv);
     }
 
+    public void clear() {
+        SQLiteDatabase.deleteDatabase(new File(dbName));
+        db = SQLiteDatabase.openOrCreateDatabase(dbName, null);
+        cmd = "CREATE TABLE IF NOT EXISTS " + tableName + " (date VARCHAR, subject VARCHAR, content VARCHAR)";
+        db.execSQL(cmd);
+    }
 
 }

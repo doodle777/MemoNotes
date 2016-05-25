@@ -11,14 +11,46 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+
+import java.util.Date;
 
 public class DetailActivity extends AppCompatActivity {
+
+    private EditText edSubject, edContent;
+    private String date, subject, content, mode;
+    private Information info = new Information();
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        date = new Date().toString();
+        subject = edSubject.getText().toString();
+        content = edContent.getText().toString();
+        if(!(subject.equals("") && content.equals(""))) {
+            if(subject.equals("")) subject = "主题为空";
+            if(content.equals("")) content = "内容为空";
+
+            if(mode.equals("edit"))
+                info.mode = "editFinish";
+            else
+                info.mode = "newFinish";
+
+            info.date = date;
+            info.subject = subject;
+            info.content = content;
+            info.flag = true;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_detail);
+        edSubject = (EditText)findViewById(R.id.et_subject);
+        edContent = (EditText)findViewById(R.id.et_content);
         setSupportActionBar(toolbar);
 
         toolbar.setNavigationIcon(android.R.drawable.ic_menu_revert);
@@ -28,6 +60,18 @@ public class DetailActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        mode = info.mode;
+        // 点击编辑
+        if(mode.equals("edit")) {
+            date = info.date;
+            subject= info.subject;
+            content = info.content;
+
+            edSubject.setText(subject);
+            edContent.setText(content);
+        }
+
     }
 
     @Override

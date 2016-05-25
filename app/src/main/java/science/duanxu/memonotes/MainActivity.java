@@ -1,18 +1,13 @@
 package science.duanxu.memonotes;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -20,6 +15,28 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private ListView listView;
+    private Intent intent;
+    private MyDB mydb;
+    private List<Memo> memos;
+    private String date, subject, content;
+    private Information info = new Information();
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(info.mode.equals("newFinish") && info.flag) {
+            date = info.date;
+            subject = info.subject;
+            content = info.content;
+
+            Memo memo = new Memo(date, subject, content);
+            memos.add(memo);
+            mydb.add(memo);
+            info.mode = "new";
+            info.flag = false;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                info.mode = "new";
                 startActivity(new Intent(MainActivity.this, DetailActivity.class));
             }
         });
@@ -61,16 +79,20 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
     public void initView()
     {
-        MyDB mydb = new MyDB();
-        List<Memo> memos  =mydb.memos;
+        mydb = new MyDB();
+        memos = mydb.memos;
 
         listView = (ListView) findViewById(R.id.listView);
         SimpleAdapter adapter = new SimpleAdapter(this, memos, R.layout.item_listview,
                 new String[]{"subject", "date", "content"},
                 new int[]{R.id.item_subject, R.id.item_date, R.id.item_content});
         listView.setAdapter(adapter);
-
     }
 }
