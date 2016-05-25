@@ -25,7 +25,7 @@ public class DetailActivity extends AppCompatActivity {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(DetailActivity.this, MainActivity.class));
+                finish();
             }
         });
     }
@@ -46,7 +46,7 @@ public class DetailActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_delete) {
-            startActivity(new Intent(DetailActivity.this, MainActivity.class));
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
