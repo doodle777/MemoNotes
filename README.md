@@ -9,7 +9,7 @@
 
 程序截图：
 <div style="text-align: center">
-<img src="./images/main.png"/> 
-<img src="./images/detail.png"/> 
+<img src="./images/main.png" height="40%" width="40%"/> 
+<img src="./images/detail.png" height="40%" width="40%"/> 
 </div>
 
