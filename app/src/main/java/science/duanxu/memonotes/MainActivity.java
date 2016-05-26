@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     private Intent intent;
     private MyDB mydb;
     private List<Memo> memos;
+    private SimpleAdapter adapter;
     private String date, subject, content;
     private Information info = new Information();
 
@@ -25,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        if(info.mode.equals("newFinish") && info.flag) {
+        if(info.mode.equals("newFinish")) {
             date = info.date;
             subject = info.subject;
             content = info.content;
@@ -33,9 +35,39 @@ public class MainActivity extends AppCompatActivity {
             Memo memo = new Memo(date, subject, content);
             memos.add(memo);
             mydb.add(memo);
-            info.mode = "new";
-            info.flag = false;
         }
+
+        if(info.mode.equals("editFinish")) {
+            date = info.date;
+            subject = info.subject;
+            content = info.content;
+
+            Memo memo = new Memo(date, subject, content);
+            for(int i = 0; i < memos.size(); i++) {
+                if(memos.get(i).date.equals(date)) {
+                    memos.set(i, memo);
+                }
+            }
+        }
+
+        if(info.mode.equals("delete")) {
+            date = info.date;
+            subject = info.subject;
+            content = info.content;
+
+            for(int i = 0; i < memos.size(); i++) {
+                if(memos.get(i).date.equals(date)) {
+                    memos.remove(i);
+                }
+            }
+        }
+
+        info.flag = false;
+        info.mode = "new";
+        info.date = "";
+        info.subject = "";
+        info.content = "";
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -82,6 +114,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
+        mydb.clear();;
+        for(int i = 0; i < memos.size(); i++)
+            mydb.add(memos.get(i));
     }
 
     public void initView()
@@ -90,9 +126,20 @@ public class MainActivity extends AppCompatActivity {
         memos = mydb.memos;
 
         listView = (ListView) findViewById(R.id.listView);
-        SimpleAdapter adapter = new SimpleAdapter(this, memos, R.layout.item_listview,
+        adapter = new SimpleAdapter(this, memos, R.layout.item_listview,
                 new String[]{"subject", "date", "content"},
                 new int[]{R.id.item_subject, R.id.item_date, R.id.item_content});
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Memo memo = (Memo)listView.getItemAtPosition(i);
+                info.mode = "edit";
+                info.subject = memo.subject;
+                info.date = memo.date;
+                info.content = memo.content;
+                startActivity(new Intent(MainActivity.this, DetailActivity.class));
+            }
+        });
     }
 }

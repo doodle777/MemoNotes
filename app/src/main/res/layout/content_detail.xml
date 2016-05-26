@@ -27,7 +27,6 @@
         android:background="@null"
         android:gravity="top"
         android:inputType="textMultiLine"
-        android:ems="10"
         android:id="@+id/et_content"
         android:layout_weight="0.75" />
 

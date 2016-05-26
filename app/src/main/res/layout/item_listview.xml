@@ -1,30 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     android:layout_width="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_height="wrap_content"
-    android:paddingLeft="10dp"
-    android:id="@+id/item_listview">
+    android:id="@+id/item_listview"
+    android:paddingTop="5dp"
+    android:paddingBottom="10dp">
 
-    <LinearLayout
+    <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="match_parent">
-        <TextView
-            android:layout_height="match_parent"
-            android:layout_width="50dp"
-            android:gravity="center_vertical|start"
-            android:id="@+id/item_date">
-        </TextView>
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:src="@android:drawable/ic_menu_edit"
+        android:id="@+id/imageView"
+        android:layout_centerVertical="true"
+        android:layout_alignParentStart="true" />
 
     <LinearLayout android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/imageView"
+        android:paddingStart="10dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="30sp"
+            android:textSize="20sp"
             android:id="@+id/item_subject">
         </TextView>
 
@@ -35,4 +36,12 @@
         </TextView>
     </LinearLayout>
 
-</LinearLayout>
+    <TextView
+        android:layout_height="match_parent"
+        android:layout_width="50dp"
+        android:id="@+id/item_date"
+        android:layout_centerVertical="true"
+        android:layout_alignParentEnd="true">
+    </TextView>
+
+</RelativeLayout>

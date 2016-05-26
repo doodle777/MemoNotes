@@ -25,17 +25,17 @@ public class DetailActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        date = new Date().toString();
         subject = edSubject.getText().toString();
         content = edContent.getText().toString();
         if(!(subject.equals("") && content.equals(""))) {
             if(subject.equals("")) subject = "主题为空";
             if(content.equals("")) content = "内容为空";
 
-            if(mode.equals("edit"))
-                info.mode = "editFinish";
-            else
+            if(mode.equals("new")) {
+                date = new Date().toLocaleString();
                 info.mode = "newFinish";
+            } else if(mode.equals("edit"))
+                info.mode = "editFinish";
 
             info.date = date;
             info.subject = subject;
@@ -90,6 +90,8 @@ public class DetailActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_delete) {
+            mode = "delete";
+            info.mode = "delete";
             finish();
         }
 
